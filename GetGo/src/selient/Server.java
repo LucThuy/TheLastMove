@@ -5,16 +5,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import java.awt.BorderLayout;
 
 public class Server extends JFrame {
 
@@ -22,8 +27,13 @@ public class Server extends JFrame {
 	private static Server frame;
 	private JTextField txtPort;
 	private JButton btnRunServer;
+	private JButton btnShutDown;
 	
-	private ServerSocket ss;
+	private ServerSocket server;
+	private Map<String, WorkerThread> clients = new HashMap<>();
+
+	
+	private int port = 1;
 
 	/**
 	 * Launch the application.
@@ -57,20 +67,24 @@ public class Server extends JFrame {
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		btnRunServer = new JButton("RUN! SERVER! RUN!");
-		btnRunServer.setBackground(Color.PINK);
-		btnRunServer.setBounds(151, 114, 124, 21);
-		contentPane.add(btnRunServer);
+		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		txtPort = new JTextField();
+		txtPort.setBackground(Color.LIGHT_GRAY);
 		txtPort.setHorizontalAlignment(SwingConstants.CENTER);
-		txtPort.setBounds(151, 58, 124, 19);
-		contentPane.add(txtPort);
-		txtPort.setColumns(10);
+		contentPane.add(txtPort, BorderLayout.NORTH);
+		txtPort.setColumns(10);		
 		
+		btnRunServer = new JButton("RUN! SERVER! RUN!");
+		btnRunServer.setBackground(Color.GRAY);
+		contentPane.add(btnRunServer, BorderLayout.WEST);
 		btnRunServer.addActionListener(new BtnRunServer());
+		
+		btnShutDown = new JButton("Shut Down");
+		btnShutDown.setBackground(Color.GRAY);
+		contentPane.add(btnShutDown, BorderLayout.EAST);
+		btnShutDown.addActionListener(new BtnShutDown());
+
 	}
 	
 	
@@ -79,28 +93,57 @@ public class Server extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
-			JDialog dialog = new JDialog(Server.frame, "con cak");
-			
-			try {
-				String port = "1";
-				if(txtPort.getText() != "") {
-					port = txtPort.getText();
-					System.out.println("1" + port + "1");
-				}
-				ss = new ServerSocket(Integer.parseInt(port));
-			} catch (NumberFormatException | IOException e1) {
-				JLabel failMess = new JLabel("Con cak ban oi\n" + e1.getMessage());
-				e1.printStackTrace();
+			String inputPort = txtPort.getText();
+			if(!inputPort.equals("")) {
+				port = Integer.parseInt(inputPort);
 			}
 			
-			JLabel successMess = new JLabel("Server chay r cho oi");
-			successMess.setHorizontalAlignment(SwingConstants.CENTER);
-			
-			dialog.add(successMess);
-			dialog.setVisible(true);
-			dialog.setBounds(115, 75, 200, 100);
+			boolean check = true;
+			try {
+				server = new ServerSocket(port);
+			} catch (IOException e1) {
+				RunServerFail failDialog = new RunServerFail();
+				failDialog.setVisible(true);
+				check = false;
+				e1.printStackTrace();
+			}
+			if(check) {
+				RunServerSuccess successDialog = new RunServerSuccess(port);
+				successDialog.setVisible(true);
+				
+				RunServer runServer = new RunServer();
+				runServer.start();
+			}
 		}
+	}
+	
+	class BtnShutDown implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				server.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	class RunServer extends Thread {
 		
+		@Override
+		public void run() {
+			while(true) {
+				try {
+					Socket client = server.accept();
+					
+					WorkerThread handler = new WorkerThread(client);
+					handler.start();
+					clients.put(handler.getUid(), handler);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}	
+		}
 	}
 }

@@ -10,10 +10,12 @@ import org.json.simple.parser.ParseException;
 
 public class Container extends JPanel {
 
-	public PlayScene playScene;
-	public WinScene winScene;
+	private PlayScene playScene;
+	private WinScene winScene;
+	private MenuScene menuScene;
 	
-	public CardLayout cardLayout;
+	
+	private CardLayout cardLayout;
 	/**
 	 * Create the panel.
 	 * @throws ParseException 
@@ -28,10 +30,18 @@ public class Container extends JPanel {
 		add(this.playScene, "playScene");
 		winScene = new WinScene(this);
 		add(this.winScene, "winScene");
+		menuScene = new MenuScene(this);
+		add(this.menuScene, "menuScene");
 		
-		showPlayScene();
+		showMenuScene();
 	}
 	
+	public void showMenuScene() {
+		cardLayout.show(this, "menuScene");
+		menuScene.setFocusable(true);
+		menuScene.requestFocusInWindow();
+	}
+
 	public void showPlayScene() throws FileNotFoundException, IOException, ParseException {
 		playScene.setUp();
 		cardLayout.show(this, "playScene");
