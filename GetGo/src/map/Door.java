@@ -21,6 +21,11 @@ public class Door extends Layer {
 //		}
 //	}
 	
+	public void drawEnd(Graphics g, int endDoorID) {
+		g.setColor(Color.ORANGE);
+		g.drawRect(super.bound.get(endDoorID).x - 1, super.bound.get(endDoorID).y - 1, super.SIZE + 2, super.SIZE + 2);
+	}
+	
 	public void drawEnd(Graphics g, Vector<EndPoint> endPoint, String name) {
 		for(int i = 0; i < endPoint.size(); i++) {
 			int ID = endPoint.get(i).ID;

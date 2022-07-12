@@ -9,6 +9,10 @@ public class EndPoint {
 		
 	}
 	
+	public EndPoint(int doorID) {
+		this.doorID = doorID;
+	}
+	
 	public EndPoint(int ID, int doorID) {
 		this.ID = ID;
 		this.doorID = doorID;

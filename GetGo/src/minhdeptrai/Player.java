@@ -1,6 +1,7 @@
 package minhdeptrai;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -36,7 +37,7 @@ public class Player {
 	public int HEIGHT = 28;
 	public final int SIZE = 28;
 	
-	public final String NAME = "MINH";
+	private String name;
 	
 	public Player(int x, int y, long[][] data) throws IOException {
 		this.position.x = x;
@@ -48,6 +49,8 @@ public class Player {
 		this.msW = 0;
 		this.msS = 0;
 		
+		this.name = "minh";
+		
 		this.blink.isBlink = false;
 		
 		BufferedImage bigImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
@@ -58,8 +61,10 @@ public class Player {
 	public void draw(Graphics g) {
 		g.setColor(Color.GREEN);
 		g.drawRect(this.position.x, this.position.y, WIDTH, HEIGHT);
-		g.drawImage(img, this.position.x, this.position.y, WIDTH, HEIGHT, null);
-		g.drawString(NAME, this.position.x, this.position.y - 3);
+		g.drawImage(this.img, this.position.x, this.position.y, WIDTH, HEIGHT, null);
+		
+		g.setFont(new Font("Georgia", Font.PLAIN, 10));
+		g.drawString(this.name, this.position.x, this.position.y - 3);
 	}
 	
 	public void setBound() {
@@ -129,5 +134,13 @@ public class Player {
 			return true;
 		}
 		return false;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 }

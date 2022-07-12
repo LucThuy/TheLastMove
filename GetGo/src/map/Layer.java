@@ -34,7 +34,7 @@ public class Layer {
 			dataArr[i % (int)WIDTH][i / (int)WIDTH] = data[i];
 		}
 		
-		setPosition();
+//		setPosition();
 		setBound();
 	}
 	
@@ -65,7 +65,7 @@ public class Layer {
 		for(int i = 0; i < HEIGHT; i++) {
 			for(int j = 0; j < WIDTH; j++) {
 				if(dataArr[j][i] != 0) {
-					Position tmp = new Position(j*SIZE, i*SIZE);
+					Position tmp = new Position(j * SIZE, i * SIZE);
 					this.position.add(tmp);
 				}
 			}

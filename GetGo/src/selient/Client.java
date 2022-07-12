@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,17 +26,20 @@ import scene.Container;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Color;
+import java.awt.GridLayout;
+import javax.swing.Box;
 
 public class Client extends JFrame {
 
 	private JPanel contentPane;
 	private static Client frame;
-	private JTextField txtChat;
-	private JButton btnEnter;
-	private JTextField txtPort;
-	private JButton btnConnectServer;
+	
+	private String clientName;
 	
 	private Container container;
+	
+	private ChillThread chillThread;
+	private RageThread rageThread;
 	
 	private Socket socket;
 
@@ -61,95 +66,97 @@ public class Client extends JFrame {
 	 * @throws FileNotFoundException 
 	 */
 	public Client() throws FileNotFoundException, IOException, ParseException {
+		setTitle("Con cho");
 		setUI();
+		
+		this.clientName = "minh";
+		createChillThread();
 	}
 	
 	private void setUI() throws FileNotFoundException, IOException, ParseException {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new CustomWindowListener());
+		setBounds(0, 0, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		txtChat = new JTextField();
-		txtChat.setBackground(Color.LIGHT_GRAY);
-		contentPane.add(txtChat, BorderLayout.SOUTH);
-		txtChat.setColumns(10);
-		
-		btnEnter = new JButton("Enter");
-		btnEnter.setBackground(Color.GRAY);
-		contentPane.add(btnEnter, BorderLayout.EAST);
-		btnEnter.addActionListener(new BtnEnter());
-		
-		
-		txtPort = new JTextField();
-		txtPort.setBackground(Color.LIGHT_GRAY);
-		contentPane.add(txtPort, BorderLayout.NORTH);
-		txtPort.setColumns(10);
-		
-		btnConnectServer = new JButton("Connect Server");
-		btnConnectServer.setBackground(Color.GRAY);
-		contentPane.add(btnConnectServer, BorderLayout.WEST);
-		btnConnectServer.addActionListener(new BtnConnectServer());
-		
-		this.container = new Container();
-		getContentPane().add(container);
+		this.container = new Container(this);
+		contentPane.add(container, BorderLayout.CENTER);
 	}
 	
-	private InputStream inputStream;
-	private Scanner scan;
+	public void createChillThread() {
+		chillThread = new ChillThread(this);
+		chillThread.start();
+	}
 	
-	private OutputStream outputStream;
-	private PrintWriter print;
+	public void createRageThread(int port) {
+		rageThread = new RageThread(this, port);
+		rageThread.start();
+	}
 	
-	class BtnEnter implements ActionListener {
+	class CustomWindowListener implements WindowListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			String mess = txtChat.getText();
-			print.println(mess);
-			txtChat.setText("");
-			String strReceive = scan.nextLine();
-			System.out.println("Receive from server: " + strReceive);
-			if(mess.equals("gg")) {
-				try {
-					socket.close();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
+		public void windowOpened(WindowEvent e) {
+			
 		}
-		
-	}
-	
-	class BtnConnectServer implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			int port = Integer.parseInt(txtPort.getText());
-			
-			boolean check = true;
+		public void windowClosing(WindowEvent e) {
 			try {
-				socket = new Socket("127.0.0.1", port);
-				
-				inputStream = socket.getInputStream();
-			    scan = new Scanner(inputStream);
-			    
-			    outputStream = socket.getOutputStream();
-			    print = new PrintWriter(outputStream, true);
+				chillThread.byeBye();
 			} catch (IOException e1) {
-				ConnectServerFail failDialog = new ConnectServerFail();
-				failDialog.setVisible(true);
-				check = false;
 				e1.printStackTrace();
-			}	
-			
-			if(check) {
-				ConnectServerSuccess successDialog = new ConnectServerSuccess(port);
-				successDialog.setVisible(true);
 			}
-		}	
+			System.exit(0);
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+			
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e) {
+			
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+			
+		}
+
+		@Override
+		public void windowActivated(WindowEvent e) {
+			
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+			
+		}		
+	}
+	
+	public Container aloContainer() {
+		return container;
+	}
+	
+	public ChillThread getChillThread() {
+		return chillThread;
+	}
+	
+	public RageThread getRageThread() {
+		return rageThread;
+	}
+	
+	public String getClientName() {
+		return this.clientName;
+	}
+	
+	public void setClientName(String name) {
+		this.clientName = name;
 	}
 }

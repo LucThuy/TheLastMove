@@ -53,11 +53,7 @@ public class WinScene extends JPanel {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			try {
-				container.showPlayScene();
-			} catch (IOException | ParseException e1) {
-				e1.printStackTrace();
-			}
+			container.showMenuScene();
 		}
 
 		@Override

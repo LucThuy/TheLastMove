@@ -26,6 +26,11 @@ import minhdeptrai.Cat;
 import minhdeptrai.Dog;
 import minhdeptrai.Player;
 import minhdeptrai.ZaWarudo;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Color;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 
 public class PlayScene extends JPanel {
 
@@ -43,6 +48,9 @@ public class PlayScene extends JPanel {
 	
 	public Vector<ZaWarudo> zaWarudo = new Vector<>();	
 	public Cooldown zaWarudoCD;
+	
+	private Rectangle endPointBound;
+	private int endDoorID;
 	
 	public Map map;
 	public Player player;
@@ -62,12 +70,12 @@ public class PlayScene extends JPanel {
 		
 		this.map = new Map();
 		this.AStar = new AStar(map.path.dataArr, (int) map.path.WIDTH, (int) map.path.HEIGHT);	
-		
+
 		setUp();
 		
-		addKeyListener(new CustomKeyListener());
+//		addKeyListener(new CustomKeyListener());
 		this.update = new Timer(1000/FPS, new CustomActionListener());
-		this.update.restart();
+		this.update.start();
 	}
 	
 	public void setUp() throws IOException {
@@ -128,12 +136,15 @@ public class PlayScene extends JPanel {
 				this.zaWarudo.get(i).draw(g);
 			}
 		}
+		this.map.door.drawEnd(g, endDoorID);
 		this.player.draw(g);
 	}
+	
 
 	public void addPlayer() throws IOException {
 		Rectangle startPos = new Rectangle(this.map.elevator.bound.get(2));
 		this.player = new Player(startPos.x, startPos.y, this.map.path.dataArr);
+		genEndPoint();
 	}
 	
 	public void addDog() throws IOException {
@@ -210,6 +221,19 @@ public class PlayScene extends JPanel {
 		if(ZaWarudo.isZaWarudo && !ZaWarudo.zaWarudoCD.isCD()) {
 			ZaWarudo.isZaWarudo = false;
 		}
+	}
+	
+	private void genEndPoint() {
+		Random rd = new Random();
+		endDoorID = rd.nextInt(this.map.door.bound.size());
+		endPointBound = this.map.door.bound.get(endDoorID);
+	}
+	
+	private boolean isEnd() {
+		if(endPointBound.contains(this.player.bound)) {
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean isWin() {
@@ -314,6 +338,11 @@ public class PlayScene extends JPanel {
 			player.move(playerBlock);
 			
 			repaint();
+			
+			if(isEnd()) {
+				genEndPoint();
+			}
+			
 			if(isWin()) {
 				container.showWinScene();	
 			}		
