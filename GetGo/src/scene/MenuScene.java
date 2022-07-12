@@ -28,6 +28,7 @@ import javax.swing.Box;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -50,14 +51,8 @@ public class MenuScene extends JPanel {
 	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		BufferedImage image = new BufferedImage(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-		try {
-			image = ImageIO.read(new File ("data/background.jpg"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		g.drawImage(image, 0, 0, null);
+		ImageIcon background = new ImageIcon("data/background.jpg");
+		g.drawImage(background.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
 	}
 	
 	private void setUI() {
