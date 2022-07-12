@@ -1,4 +1,4 @@
-package minhdeptrai;
+package object;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -14,12 +14,12 @@ import javax.imageio.ImageIO;
 import algorithm.Node;
 import algorithm.Position;
 
-public class Cat {
+public class Agent {
 
 	public Position position = new Position();
 	public Rectangle bound = new Rectangle();
 	
-	public int catID;
+	public int agentID;
 
 	public int msE;
 	public int msN;
@@ -27,7 +27,7 @@ public class Cat {
 	public int msS;
 	public int ms;
 	
-	public boolean isCatDone = false;
+	public boolean isAgentDone = false;
 	
 	public Vector<Node> path;
 	public Node nextNode = new Node();
@@ -36,9 +36,9 @@ public class Cat {
 	
 	public final int WIDTH = 28;
 	public final int HEIGHT = 28;
-	public final int SIZE = 28;
+	public final int SIZE = 32;
 
-	public Cat(int x, int y, Vector<Node> path, int catID) throws IOException {
+	public Agent(int x, int y, Vector<Node> path, int agentID) throws IOException {
 		this.position.x = x;
 		this.position.y = y;
 		this.ms = 1;
@@ -46,7 +46,7 @@ public class Cat {
 		this.msN = 0;
 		this.msW = 0;
 		this.msS = 0;
-		this.catID = catID;
+		this.agentID = agentID;
 		
 		this.path = path;
 		this.nextNode = path.remove(path.size() - 1);
@@ -62,7 +62,7 @@ public class Cat {
 		g.drawRect(this.position.x, this.position.y, WIDTH, HEIGHT);
 		g.drawImage(img, this.position.x, this.position.y, WIDTH, HEIGHT, null);
 		g.setColor(Color.GRAY);
-		g.drawString(String.valueOf(catID), this.position.x + 15, this.position.y - 3);
+		g.drawString(String.valueOf(agentID), this.position.x + 15, this.position.y - 3);
 	}
 	
 	public void draw(Graphics g, boolean isZaWarudo) {
@@ -81,7 +81,7 @@ public class Cat {
 			this.msW = 0;
 			this.msS = 0;
 			if(path.isEmpty()) {
-				this.isCatDone = true;
+				this.isAgentDone = true;
 			}
 			else {
 				nextNode = path.remove(path.size() - 1);

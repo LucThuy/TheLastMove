@@ -1,4 +1,4 @@
-package minhdeptrai;
+package object;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -14,12 +14,12 @@ import javax.imageio.ImageIO;
 import algorithm.Node;
 import algorithm.Position;
 
-public class Dog {
+public class Agv {
 
 	public Position position = new Position();
 	public Rectangle bound = new Rectangle();
 	
-	public int dogID;
+	public int agvID;
 
 	public int msE;
 	public int msN;
@@ -27,7 +27,7 @@ public class Dog {
 	public int msS;
 	public int ms;
 	
-	public boolean isDogDone = false;
+	public boolean isAgvDone = false;
 	
 	public Vector<Node> path;
 	public Node nextNode = new Node();
@@ -36,9 +36,9 @@ public class Dog {
 	
 	public final int WIDTH = 28;
 	public final int HEIGHT = 28;
-	public final int SIZE = 28;
+	public final int SIZE = 32;
 
-	public Dog(int x, int y, Vector<Node> path, int dogID) throws IOException {
+	public Agv(int x, int y, Vector<Node> path, int agvID) throws IOException {
 		this.position.x = x;
 		this.position.y = y;
 		this.ms = 1;
@@ -46,7 +46,7 @@ public class Dog {
 		this.msN = 0;
 		this.msW = 0;
 		this.msS = 0;
-		this.dogID = dogID;
+		this.agvID = agvID;
 		
 		this.path = path;
 		this.nextNode = path.remove(path.size() - 1);
@@ -62,7 +62,7 @@ public class Dog {
 		g.drawRect(this.position.x, this.position.y, WIDTH, HEIGHT);
 		g.drawImage(img, this.position.x, this.position.y, WIDTH, HEIGHT, null);
 		g.setColor(Color.BLACK);
-		g.drawString(String.valueOf(dogID), this.position.x + 3, this.position.y - 3);
+		g.drawString(String.valueOf(agvID), this.position.x + 3, this.position.y - 3);
 	}
 	
 	public void draw(Graphics g, boolean isZaWarudo) {
@@ -81,7 +81,7 @@ public class Dog {
 			this.msW = 0;
 			this.msS = 0;
 			if(path.isEmpty()) {
-				this.isDogDone = true;
+				this.isAgvDone = true;
 			}
 			else {
 				nextNode = path.remove(path.size() - 1);

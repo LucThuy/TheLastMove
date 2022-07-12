@@ -19,6 +19,8 @@ import java.awt.Window.Type;
 public class Main extends JFrame {
 
 	private JPanel contentPane;
+	public static final int SCREEN_WIDTH = 1920; //Chiều rộng màn hình game
+	public static final int SCREEN_HEIGHT = 1080; //Chiều cao màn hình game
 	
 	public Container container;
 

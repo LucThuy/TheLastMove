@@ -9,6 +9,8 @@ import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -21,6 +23,7 @@ import java.awt.GridBagLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -28,6 +31,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Graphics;
+
 import javax.swing.SwingConstants;
 
 public class MenuScene extends JPanel {
@@ -41,6 +46,18 @@ public class MenuScene extends JPanel {
 	public MenuScene(Container container) {	
 		this.container = container;
 		setUI();				
+	}
+	
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		BufferedImage image = new BufferedImage(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		try {
+			image = ImageIO.read(new File ("data/background.jpg"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		g.drawImage(image, 0, 0, null);
 	}
 	
 	private void setUI() {
@@ -93,7 +110,7 @@ public class MenuScene extends JPanel {
 						
 		JPanel pnlNameInput = new JPanel();
 		pnlNameInput.setForeground(Color.BLACK);
-		pnlNameInput.setBackground(Color.GRAY);
+//		pnlNameInput.setBackground(Color.GRAY);
 		GridBagConstraints gbc_pnlNameInput = new GridBagConstraints();
 		gbc_pnlNameInput.fill = GridBagConstraints.BOTH;
 		gbc_pnlNameInput.insets = new Insets(0, 0, 0, 5);
