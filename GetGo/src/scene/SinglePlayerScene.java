@@ -69,7 +69,7 @@ public class SinglePlayerScene extends JPanel {
 		add(panel_1, gbc_panel_1);
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 		
-		JButton btnBack = new JButton("Back");
+		JButton btnBack = new JButton("Pause");
 		btnBack.setForeground(Color.WHITE);
 		btnBack.setBackground(Color.GRAY);
 		btnBack.setFocusable(false);
@@ -87,7 +87,7 @@ public class SinglePlayerScene extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			playScene.update.stop();
 			
-			container.showMenuScene();	
+			container.showPauseScene();	
 		}	
 	}
 	
