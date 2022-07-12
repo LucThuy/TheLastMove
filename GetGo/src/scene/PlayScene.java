@@ -44,6 +44,9 @@ public class PlayScene extends JPanel {
 	public Vector<ZaWarudo> zaWarudo = new Vector<>();	
 	public Cooldown zaWarudoCD;
 	
+	private Rectangle endPointBound;
+	private int endDoorID;
+	
 	public Map map;
 	public Player player;
 	public Timer update;
@@ -134,6 +137,7 @@ public class PlayScene extends JPanel {
 	public void addPlayer() throws IOException {
 		Rectangle startPos = new Rectangle(this.map.elevator.bound.get(2));
 		this.player = new Player(startPos.x, startPos.y, this.map.path.dataArr);
+		genEndPoint();
 	}
 	
 	public void addAgv() throws IOException {
@@ -210,6 +214,19 @@ public class PlayScene extends JPanel {
 		if(ZaWarudo.isZaWarudo && !ZaWarudo.zaWarudoCD.isCD()) {
 			ZaWarudo.isZaWarudo = false;
 		}
+	}
+	
+	private void genEndPoint() {
+		Random rd = new Random();
+		endDoorID = rd.nextInt(this.map.door.bound.size());
+		endPointBound = this.map.door.bound.get(endDoorID);
+	}
+	
+	private boolean isEnd() {
+		if(endPointBound.contains(this.player.bound)) {
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean isWin() {
@@ -314,6 +331,10 @@ public class PlayScene extends JPanel {
 			player.move(playerBlock);
 			
 			repaint();
+			if(isEnd()) {
+				genEndPoint();
+			}
+			
 			if(isWin()) {
 				container.showWinScene();	
 			}		
