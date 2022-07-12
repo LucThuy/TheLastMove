@@ -109,7 +109,7 @@ public class MenuScene extends JPanel {
 		pnlPic.add(lblHospital, gbc_lblHospital);
 						
 		JPanel pnlNameInput = new JPanel();
-		pnlNameInput.setForeground(Color.BLACK);
+//		pnlNameInput.setForeground(Color.BLACK);
 //		pnlNameInput.setBackground(Color.GRAY);
 		GridBagConstraints gbc_pnlNameInput = new GridBagConstraints();
 		gbc_pnlNameInput.fill = GridBagConstraints.BOTH;
