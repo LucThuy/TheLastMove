@@ -19,7 +19,7 @@ public class Agent {
 	public Position position = new Position();
 	public Rectangle bound = new Rectangle();
 	
-	public int agentID;
+	public int AgentID;
 
 	public int msE;
 	public int msN;
@@ -36,9 +36,9 @@ public class Agent {
 	
 	public final int WIDTH = 28;
 	public final int HEIGHT = 28;
-	public final int SIZE = 32;
+	public final int SIZE = 28;
 
-	public Agent(int x, int y, Vector<Node> path, int agentID) throws IOException {
+	public Agent(int x, int y, Vector<Node> path, int AgentID) throws IOException {
 		this.position.x = x;
 		this.position.y = y;
 		this.ms = 1;
@@ -46,7 +46,7 @@ public class Agent {
 		this.msN = 0;
 		this.msW = 0;
 		this.msS = 0;
-		this.agentID = agentID;
+		this.AgentID = AgentID;
 		
 		this.path = path;
 		this.nextNode = path.remove(path.size() - 1);
@@ -62,7 +62,7 @@ public class Agent {
 		g.drawRect(this.position.x, this.position.y, WIDTH, HEIGHT);
 		g.drawImage(img, this.position.x, this.position.y, WIDTH, HEIGHT, null);
 		g.setColor(Color.GRAY);
-		g.drawString(String.valueOf(agentID), this.position.x + 15, this.position.y - 3);
+		g.drawString(String.valueOf(AgentID), this.position.x + 15, this.position.y - 3);
 	}
 	
 	public void draw(Graphics g, boolean isZaWarudo) {

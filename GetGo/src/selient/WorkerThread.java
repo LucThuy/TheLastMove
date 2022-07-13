@@ -6,21 +6,22 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 
 public class WorkerThread extends Thread {
 	private Socket socket;
-	private String id;
 	private Server server;
+	private String uid;
 	
 	private boolean run = true;
 	
 	public WorkerThread(Socket socket, Server server) {
 		this.socket = socket;
 		this.server = server;
-		this.id = UUID.randomUUID().toString();
+		this.uid = UUID.randomUUID().toString();
 	}
 	
 	private InputStream inputStream;
@@ -53,35 +54,48 @@ public class WorkerThread extends Thread {
 		}		        
 	}
 	
-	private void parseCommand(String command) {
+	private void parseCommand(String command) throws IOException {
 		String[] cmdList = command.split("\\s");
 		if(cmdList[0].equals("loadServerAvailable")) {
 			loadServerAvailable();
 		}
-		else if(cmdList[0].equals("byeBye")) {
-			byeBye();
+		else if(cmdList[0].equals("newRoom")) {
+			newRoom(cmdList[1]);
+		}
+		else if(cmdList[0].equals("rageByeBye")) {
+			rageByeBye();
 		}
 	}
 	
 	private void loadServerAvailable() {
-//		String re = "";
+		Map<String, String> serverAvailable = server.getServerAvailable();
 		
-//		int n = serverAvailable.size();
-//		String num = String.valueOf(n);
-//		re = re + num + "\n";
+		print.println(serverAvailable.size());
 		
-		print.println(server.getServerAvailable().size());
-		
-		server.getServerAvailable().forEach((port, name) -> {
-			print.println(port + " " + name);
+		serverAvailable.forEach((name, port) -> {
+			print.println(name + " " + port);
 		});
 	}
 	
-	private void byeBye() {
+	private void newRoom(String roomName) throws IOException {
+		this.server.openNewServer(roomName);
+		
+		print.println(this.server.getPort());
+	}
+	
+	private void rageByeBye() throws IOException {
+		this.server.closeServer(this.uid);
+		
+		this.run = false;
+	}
+	
+	private void chillByeBye() {
+		this.server.byeClient(this.uid);
+		
 		this.run = false;
 	}
 
 	public String getUid() {
-		return id;
+		return uid;
 	}
 }

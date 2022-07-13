@@ -107,6 +107,7 @@ public class Client extends JFrame {
 		@Override
 		public void windowClosing(WindowEvent e) {
 			try {
+				rageThread.byeBye();
 				chillThread.byeBye();
 			} catch (IOException e1) {
 				e1.printStackTrace();

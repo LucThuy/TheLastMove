@@ -36,7 +36,7 @@ public class Agv {
 	
 	public final int WIDTH = 28;
 	public final int HEIGHT = 28;
-	public final int SIZE = 32;
+	public final int SIZE = 28;
 
 	public Agv(int x, int y, Vector<Node> path, int agvID) throws IOException {
 		this.position.x = x;

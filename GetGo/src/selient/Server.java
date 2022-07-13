@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -29,15 +30,15 @@ public class Server extends JFrame {
 	private JTextField txtPort;
 	private JButton btnRunServer;
 	private JButton btnShutDown;
+	private JTextField txtName;
 	
 	private ServerSocket baseServer;
+	private Map<String, WorkerThread> clients = new HashMap<>();	
+	private Map<String, SubServer> servers = new HashMap<>();
 	
-	private Map<String, ServerSocket> servers = new HashMap<>();
-	private Map<String, WorkerThread> clients = new HashMap<>();
-	private Map<String, String> serverAvailable = new HashMap<>();
-
-	private JTextField txtName;
-
+	private static int port = 0;
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -81,93 +82,140 @@ public class Server extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		txtPort = new JTextField();
-		txtPort.setBackground(Color.LIGHT_GRAY);
-		txtPort.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(txtPort, BorderLayout.NORTH);
-		txtPort.setColumns(10);		
-		
-		btnRunServer = new JButton("RUN! SERVER! RUN!");
-		btnRunServer.setBackground(Color.GRAY);
-		contentPane.add(btnRunServer, BorderLayout.WEST);
-		btnRunServer.addActionListener(new BtnRunServer());
-		
-		btnShutDown = new JButton("Shut Down");
-		btnShutDown.setBackground(Color.GRAY);
-		contentPane.add(btnShutDown, BorderLayout.EAST);
-		
-		txtName = new JTextField();
-		txtName.setBackground(Color.LIGHT_GRAY);
-		contentPane.add(txtName, BorderLayout.SOUTH);
-		txtName.setColumns(10);
-		btnShutDown.addActionListener(new BtnShutDown());
+//		txtPort = new JTextField();
+//		txtPort.setBackground(Color.LIGHT_GRAY);
+//		txtPort.setHorizontalAlignment(SwingConstants.CENTER);
+//		contentPane.add(txtPort, BorderLayout.NORTH);
+//		txtPort.setColumns(10);		
+//		
+//		btnRunServer = new JButton("RUN! SERVER! RUN!");
+//		btnRunServer.setBackground(Color.GRAY);
+//		contentPane.add(btnRunServer, BorderLayout.WEST);
+//		btnRunServer.addActionListener(new BtnRunServer());
+//		
+//		btnShutDown = new JButton("Shut Down");
+//		btnShutDown.setBackground(Color.GRAY);
+//		contentPane.add(btnShutDown, BorderLayout.EAST);
+//		
+//		txtName = new JTextField();
+//		txtName.setBackground(Color.LIGHT_GRAY);
+//		contentPane.add(txtName, BorderLayout.SOUTH);
+//		txtName.setColumns(10);
+//		btnShutDown.addActionListener(new BtnShutDown());
 
 	}
 	
-	class BtnRunServer implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String inputName = txtName.getText();
-			String inputPort = txtPort.getText();
-			int port = 1;
-			if(!inputPort.equals("")) {
-				port = Integer.parseInt(inputPort);
-			}
-			
-			boolean check = true;
-			ServerSocket server = null;
-			try {
-				server = new ServerSocket(port);
-			} catch (IOException e1) {
-				RunServerFail failDialog = new RunServerFail();
-				failDialog.setVisible(true);
-				check = false;
-				e1.printStackTrace();
-			}
-			if(check) {
-				RunServerSuccess successDialog = new RunServerSuccess(port);
-				successDialog.setVisible(true);
-				
-				servers.put(inputPort, server);
-				serverAvailable.put(inputPort, inputName);
-				RunServer runServer = new RunServer();
-				runServer.start();
-			}
+	public void openNewServer(String serverName) throws IOException {
+		port++;
+		
+		SubServer newServer = new SubServer(serverName, port);		
+		newServer.start();
+	}
+	
+	public void closeServer(String uid) throws IOException {
+		if(servers.get(uid) != null) {
+			servers.get(uid).getServer().close();
+			servers.remove(uid);
 		}
 	}
 	
-	class BtnShutDown implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String inputPort = txtPort.getText();
-			
-			try {
-				servers.get(inputPort).close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
+	public void byeClient(String uid) {
+		clients.remove(uid);
 	}
 	
-	class RunServer extends Thread {
+//	class BtnRunServer implements ActionListener {
+//
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+//			String inputName = txtName.getText();
+//			String inputPort = txtPort.getText();
+//			int port = 1;
+//			if(!inputPort.equals("")) {
+//				port = Integer.parseInt(inputPort);
+//			}
+//			
+//			boolean check = true;
+//			ServerSocket server = null;
+//			try {
+//				server = new ServerSocket(port);
+//			} catch (IOException e1) {
+//				RunServerFail failDialog = new RunServerFail();
+//				failDialog.setVisible(true);
+//				check = false;
+//				e1.printStackTrace();
+//			}
+//			if(check) {
+//				RunServerSuccess successDialog = new RunServerSuccess(port);
+//				successDialog.setVisible(true);
+//				
+//				servers.put(inputPort, server);
+//				serverAvailable.put(inputPort, inputName);
+//				RunServer runServer = new RunServer(inputName);
+//				runServer.start();
+//			}
+//		}
+//	}
+//	
+//	class BtnShutDown implements ActionListener {
+//
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+//			String inputPort = txtPort.getText();
+//			
+//			try {
+//				servers.get(inputPort).close();
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+//		}
+//	}
+	
+	class SubServer extends Thread {
+		
+		private String port;
+		
+		private String serverName;
+		private ServerSocket server;
+		
+		private WorkerThread host;
+		private WorkerThread guest;
+		
+		public SubServer(String serverName, int port) throws IOException {
+			this.serverName = serverName;
+			this.server = new ServerSocket(port);
+			this.port = String.valueOf(port);
+		}
 		
 		@Override
 		public void run() {
-			while(true) {				
-				String inputPort = txtPort.getText();
+			try {
+				Socket tmp = server.accept();
+				host = new WorkerThread(tmp, Server.frame);
+				servers.put(host.getUid(), this);
+				host.start();
 				
-				try {
-					Socket client = servers.get(inputPort).accept();
-					
-					WorkerThread handler = new WorkerThread(client, Server.frame);
-					clients.put(handler.getUid(), handler);
-					handler.start();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				Socket tmq = server.accept();
+				guest = new WorkerThread(tmq, Server.frame);
+				guest.start();
+			} catch (IOException e1) {
+//				e1.printStackTrace();
 			}	
+		}
+		
+		public ServerSocket getServer() {
+			return this.server;
+		}
+		
+		public String getUid() {
+			return this.host.getUid();
+		}
+		
+		public String getServerName() {
+			return this.serverName;
+		}
+		
+		public String getPort() {
+			return this.port;
 		}
 	}
 	
@@ -180,6 +228,7 @@ public class Server extends JFrame {
 					client = baseServer.accept();
 					
 					WorkerThread handler = new WorkerThread(client, Server.frame);
+					clients.put(handler.getUid(), handler);
 					handler.start();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -189,6 +238,17 @@ public class Server extends JFrame {
 	}
 	
 	public Map<String, String> getServerAvailable() {
-		return this.serverAvailable;
+		Map<String, String> serverAvailable = new HashMap<>();
+		
+		this.servers.forEach((uid, server) -> {
+			serverAvailable.put(server.getServerName(), server.getUid());
+		});
+		
+		System.out.println(serverAvailable.size());
+		return serverAvailable;
+	}
+	
+	public int getPort() {
+		return this.port;
 	}
 }

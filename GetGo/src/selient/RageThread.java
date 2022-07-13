@@ -38,7 +38,7 @@ public class RageThread extends Thread {
 	}
 	
 	public void byeBye() throws IOException {
-		print.println("byeBye");
+		print.println("rageByeBye");
 		
 		socket.close();
 	}

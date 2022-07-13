@@ -20,25 +20,16 @@ public class PauseScene extends JPanel {
 	 * Create the panel.
 	 */
 	public PauseScene(Container container) {
-		this.container = container;
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{0};
+		gridBagLayout.rowHeights = new int[]{0};
+		gridBagLayout.columnWeights = new double[]{Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{Double.MIN_VALUE};
+		setLayout(gridBagLayout);
 		setUp();
 	}
 	
 	public void setUp() {
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{75, 75, 59, 0, 0, 88, 0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{300, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, Double.MIN_VALUE};
-		setLayout(gridBagLayout);
-		
-		JButton saveGame = new JButton("SaveGame");
-		GridBagConstraints gbc_saveGame = new GridBagConstraints();
-		gbc_saveGame.fill = GridBagConstraints.BOTH;
-		gbc_saveGame.insets = new Insets(0, 0, 0, 5);
-		gbc_saveGame.gridx = 1;
-		gbc_saveGame.gridy = 0;
-		add(saveGame, gbc_saveGame);
 		
 //		JButton resume = new JButton("Resume");
 //		GridBagConstraints gbc_resume = new GridBagConstraints();

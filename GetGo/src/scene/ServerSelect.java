@@ -27,6 +27,7 @@ import java.awt.BorderLayout;
 import javax.swing.JList;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
+import java.awt.CardLayout;
 
 public class ServerSelect extends JPanel {
 
@@ -55,8 +56,8 @@ public class ServerSelect extends JPanel {
 		JPanel pnlButton = new JPanel();
 		pnlButton.setBackground(Color.LIGHT_GRAY);
 		GridBagConstraints gbc_pnlButton = new GridBagConstraints();
+		gbc_pnlButton.fill = GridBagConstraints.BOTH;
 		gbc_pnlButton.insets = new Insets(0, 0, 0, 5);
-		gbc_pnlButton.fill = GridBagConstraints.HORIZONTAL;
 		gbc_pnlButton.gridx = 0;
 		gbc_pnlButton.gridy = 0;
 		add(pnlButton, gbc_pnlButton);
@@ -69,10 +70,32 @@ public class ServerSelect extends JPanel {
 		pnlButton.add(btnBack);
 		btnBack.setMinimumSize(new Dimension(50, 25));
 		btnBack.setPreferredSize(new Dimension(50, 25));
-		btnBack.setMaximumSize(new Dimension(100, 25));
+		btnBack.setMaximumSize(new Dimension(200, 50));
 		btnBack.addActionListener(new BtnBack());
 		
-		pnlButton.add(Box.createRigidArea(new Dimension(0, 250)));
+		Component tmpSpace = Box.createRigidArea(new Dimension(0,5));
+		pnlButton.add(tmpSpace);
+		
+		tmpSpace.setMinimumSize(new Dimension(0, 5));
+		tmpSpace.setPreferredSize(new Dimension(0, 5));
+		tmpSpace.setMaximumSize(new Dimension(0, 20));	
+		
+		JButton btnNewRoom = new JButton("New Room");
+		btnNewRoom.setForeground(Color.WHITE);
+		btnNewRoom.setBackground(Color.GRAY);
+		btnNewRoom.setAlignmentX(Component.CENTER_ALIGNMENT);
+		pnlButton.add(btnNewRoom);
+		btnNewRoom.setMinimumSize(new Dimension(50, 25));
+		btnNewRoom.setPreferredSize(new Dimension(50, 25));
+		btnNewRoom.setMaximumSize(new Dimension(200, 50));
+		btnNewRoom.addActionListener(new BtnNewRoom());
+		
+		Component tmpSpace1 = Box.createRigidArea(new Dimension(0,5));
+		pnlButton.add(tmpSpace1);
+		
+		tmpSpace1.setMinimumSize(new Dimension(0, 5));
+		tmpSpace1.setPreferredSize(new Dimension(0, 5));
+		tmpSpace1.setMaximumSize(new Dimension(0, 20));	
 		
 		JButton btnGetGo = new JButton("GetGo");
 		btnGetGo.setForeground(Color.WHITE);
@@ -81,20 +104,20 @@ public class ServerSelect extends JPanel {
 		pnlButton.add(btnGetGo);
 		btnGetGo.setMinimumSize(new Dimension(50, 25));
 		btnGetGo.setPreferredSize(new Dimension(50, 25));
-		btnGetGo.setMaximumSize(new Dimension(100, 25));
+		btnGetGo.setMaximumSize(new Dimension(200, 50));
 		btnGetGo.addActionListener(new BtnGetGo());
 		
 		JPanel pnlServer = new JPanel();
 		pnlServer.setBackground(Color.LIGHT_GRAY);
 		GridBagConstraints gbc_pnlServer = new GridBagConstraints();
-		gbc_pnlServer.fill = GridBagConstraints.HORIZONTAL;
+		gbc_pnlServer.fill = GridBagConstraints.BOTH;
 		gbc_pnlServer.gridx = 1;
 		gbc_pnlServer.gridy = 0;
 		add(pnlServer, gbc_pnlServer);
-		pnlServer.setLayout(new BorderLayout(0, 0));
+		pnlServer.setLayout(new CardLayout(0, 0));
 		
 		listServer = new JList<>();
-		pnlServer.add(listServer, BorderLayout.CENTER);
+		pnlServer.add(listServer, "listServer");
 		model = new DefaultListModel<>();
 		listServer.setModel(model);			
 	}
@@ -146,6 +169,15 @@ public class ServerSelect extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			container.showMenuScene();	
 		}		
+	}
+	
+	class BtnNewRoom implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String tmp = container.getClient().getChillThread().newRoom();
+			container.getClient().createRageThread(Integer.parseInt(tmp));
+		}
 	}
 	
 	class BtnGetGo implements ActionListener {

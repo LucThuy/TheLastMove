@@ -42,7 +42,7 @@ public class ChillThread extends Thread {
 	
 	public Map<String, String> getServerAvailable() {
 		print.println("loadServerAvailable");
-		
+
 		Map<String, String> re = new HashMap<>();
 		
 		int n = Integer.parseInt(scan.nextLine());
@@ -50,14 +50,20 @@ public class ChillThread extends Thread {
 		for(int i = 1; i <= n; i++) {
 			String strReceive = scan.nextLine();
 			String[] strList = strReceive.split("\\s");
-			re.put(strList[1], strList[0]);
+			re.put(strList[0], strList[1]);
 		}
 		
 		return re;
 	}
 	
+	public String newRoom() {
+		print.println("newRoom " + this.client.getClientName());
+		
+		return scan.nextLine();
+	}
+	
 	public void byeBye() throws IOException {
-		print.println("byeBye");
+		print.println("chillByeBye");
 
 		socket.close();
 	}
