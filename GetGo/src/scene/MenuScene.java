@@ -104,12 +104,24 @@ public class MenuScene extends JPanel {
 		txtNameInput.setPreferredSize(new Dimension(100, 25));
 		txtNameInput.setMaximumSize(new Dimension(300, 50));
 		
-		JButton btnNewButton = new JButton();
-		btnNewButton.setBackground(Color.WHITE);
-		btnNewButton.setIcon(new ImageIcon("data/single.png"));
-		btnNewButton.setBounds(10, 596, 681, 157);
-		add(btnNewButton);
-		btnNewButton.addActionListener(new BtnSinglePlayer());
+		JButton singlePlayButton = new JButton();
+		singlePlayButton.setBackground(Color.WHITE);
+//		singlePlayButton.setIcon(new ImageIcon("C:\\Users\\naman\\git\\TheLastMove\\data\\continue.png"));
+		singlePlayButton.setBounds(262, 450, 485, 114);
+		add(singlePlayButton);
+		singlePlayButton.addActionListener(new BtnSinglePlayer());
+
+		JButton multiPlayButton = new JButton();
+		multiPlayButton.setBackground(Color.WHITE);
+		multiPlayButton.setBounds(802, 450, 550, 114);
+		add(multiPlayButton);
+		multiPlayButton.addActionListener(new BtnMultiPlayer());
+
+		JButton howToPlayButton = new JButton();
+		howToPlayButton.setBackground(Color.WHITE);
+		howToPlayButton.setBounds(262, 629, 485, 114);
+		add(howToPlayButton);
+		howToPlayButton.addActionListener(new BtnHowToPlay());
 		
 		
 			
@@ -131,7 +143,7 @@ public class MenuScene extends JPanel {
 		}	
 	}
 	
-	class BtnMutilPlayer implements ActionListener {
+	class BtnMultiPlayer implements ActionListener {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -141,5 +153,13 @@ public class MenuScene extends JPanel {
 			
 			container.showServerSelect(container.getClient().getChillThread().getServerAvailable());
 		}	
+	}
+	
+	class BtnHowToPlay implements ActionListener {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			container.showHowToPlayScene();
+		}
 	}
 }

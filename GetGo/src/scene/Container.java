@@ -21,6 +21,7 @@ public class Container extends JPanel {
 	private ServerSelect serverSelect;
 	private SinglePlayerScene singlePlayerScene;
 	private PauseScene pauseScene;
+	private HowToPlayScene howToPlayScene;
 	
 	private Client client;
 	
@@ -51,6 +52,8 @@ public class Container extends JPanel {
 		add(this.singlePlayerScene, "gameScene");
 		pauseScene = new PauseScene(this);
 		add(this.pauseScene, "pauseScene");
+		howToPlayScene = new HowToPlayScene(this);
+		add(this.howToPlayScene, "howToPlayScene");
 		
 		showMenuScene();
 	}
@@ -97,6 +100,12 @@ public class Container extends JPanel {
 		pauseScene.setFocusable(true);
 		pauseScene.requestFocusInWindow();
 		
+	}
+	
+	public void showHowToPlayScene() {
+		cardLayout.show(this, "howToPlayScene");
+		howToPlayScene.setFocusable(true);
+		howToPlayScene.requestFocusInWindow();
 	}
 
 	public Client getClient() {
