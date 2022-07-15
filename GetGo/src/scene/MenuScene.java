@@ -51,7 +51,7 @@ public class MenuScene extends JPanel {
 	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		ImageIcon background = new ImageIcon("data/background.png");
+		ImageIcon background = new ImageIcon("data/menuScene.png");
 		g.drawImage(background.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
 	}
 	
@@ -60,7 +60,7 @@ public class MenuScene extends JPanel {
 		setLayout(null);
 						
 		JPanel pnlNameInput = new JPanel();
-		pnlNameInput.setBounds(409, 230, 514, 151);
+		pnlNameInput.setBounds(542, 243, 514, 151);
 //		pnlNameInput.setForeground(Color.BLACK);
 		pnlNameInput.setBackground(new Color(1.0f, 1.0f, 1.0f, 0.0f));
 		add(pnlNameInput);
@@ -123,7 +123,11 @@ public class MenuScene extends JPanel {
 		add(howToPlayButton);
 		howToPlayButton.addActionListener(new BtnHowToPlay());
 		
-		
+		JButton credit = new JButton();
+		credit.setBackground(Color.WHITE);
+		credit.setBounds(802, 629, 550, 114);
+		add(credit);
+		credit.addActionListener(new BtnCredit());
 			
 	}
 
@@ -156,6 +160,13 @@ public class MenuScene extends JPanel {
 	}
 	
 	class BtnHowToPlay implements ActionListener {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			container.showHowToPlayScene();
+		}
+	}
+	class BtnCredit implements ActionListener {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {

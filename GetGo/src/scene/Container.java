@@ -22,6 +22,7 @@ public class Container extends JPanel {
 	private SinglePlayerScene singlePlayerScene;
 	private PauseScene pauseScene;
 	private HowToPlayScene howToPlayScene;
+	private LoadGameScene loadGameScene;
 	
 	private Client client;
 	
@@ -54,6 +55,8 @@ public class Container extends JPanel {
 		add(this.pauseScene, "pauseScene");
 		howToPlayScene = new HowToPlayScene(this);
 		add(this.howToPlayScene, "howToPlayScene");
+		loadGameScene = new LoadGameScene(this);
+		add(this.loadGameScene, "loadGameScene");
 		
 		showMenuScene();
 	}
@@ -106,6 +109,12 @@ public class Container extends JPanel {
 		cardLayout.show(this, "howToPlayScene");
 		howToPlayScene.setFocusable(true);
 		howToPlayScene.requestFocusInWindow();
+	}
+	
+	public void showLoadGameScene() {
+		cardLayout.show(this, "loadGameScene");
+		loadGameScene.setFocusable(true);
+		loadGameScene.requestFocusInWindow();
 	}
 
 	public Client getClient() {

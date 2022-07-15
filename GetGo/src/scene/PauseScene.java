@@ -5,6 +5,8 @@ import javax.swing.JPanel;
 import org.json.simple.parser.ParseException;
 
 import java.awt.GridLayout;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -13,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
@@ -34,6 +38,12 @@ public class PauseScene extends JPanel {
 		setUp();
 	}
 	
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		ImageIcon background = new ImageIcon("data/background.png");
+		g.drawImage(background.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+	}
+	
 	public void setUp() {
 		JButton loadGame = new JButton();
 		loadGame.setBounds(96, 448, 344, 122);
@@ -49,7 +59,11 @@ public class PauseScene extends JPanel {
 		home.setBounds(989, 448, 344, 122);
 		add(home);
 		home.addActionListener(new BtnHome());
-
+		
+		JButton saveGame = new JButton();
+		saveGame.setBounds(541, 625, 344, 122);
+		add(saveGame);
+		saveGame.addActionListener(new BtnSaveGame());
 	}
 	
 	class BtnHome implements ActionListener {
@@ -64,7 +78,7 @@ public class PauseScene extends JPanel {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			container.showMenuScene();
+			container.showLoadGameScene();
 		}
 	}
 	
@@ -89,6 +103,4 @@ public class PauseScene extends JPanel {
 			}
 		}
 	}
-	
-
 }

@@ -17,17 +17,20 @@ import java.awt.Graphics;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+
+import scene.HowToPlayScene.BtnReturn;
+
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
 
-public class HowToPlayScene extends JPanel {
+public class CreditScene extends JPanel {
 	
 	public Container container;
 	/**
 	 * Create the panel.
 	 */
 	
-	public HowToPlayScene(Container container) {
+	public CreditScene(Container container) {
 		this.container = container;
 		setLayout(null);
 		
