@@ -106,7 +106,7 @@ public class MenuScene extends JPanel {
 		
 		JButton singlePlayButton = new JButton();
 		singlePlayButton.setBackground(Color.WHITE);
-//		singlePlayButton.setIcon(new ImageIcon("C:\\Users\\naman\\git\\TheLastMove\\data\\continue.png"));
+		singlePlayButton.setIcon(new ImageIcon("data/single.png"));
 		singlePlayButton.setBounds(262, 450, 485, 114);
 		add(singlePlayButton);
 		singlePlayButton.addActionListener(new BtnSinglePlayer());
