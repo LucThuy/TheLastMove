@@ -105,7 +105,7 @@ public class MenuScene extends JPanel {
 		txtNameInput.setMaximumSize(new Dimension(300, 50));
 		
 		JButton singlePlayButton = new JButton();
-		singlePlayButton.setBackground(Color.PINK);
+		singlePlayButton.setBackground(new Color(1.0f, 1.0f, 1.0f, 0.0f));
 		singlePlayButton.setIcon(new ImageIcon("data/single.png"));
 		singlePlayButton.setBounds(72, 450, 675, 168);
 		add(singlePlayButton);
